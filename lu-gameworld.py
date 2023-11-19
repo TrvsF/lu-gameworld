@@ -22,7 +22,7 @@ GameWorld = [
     ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
 ]
 Rows = len(GameWorld)
-Columns = len(GameWorld[0]) # assumes gameworld a quad
+Columns = len(GameWorld[0]) # assumes gameworld is a quad
 
 def print_grid():
     for row in GameWorld:
@@ -54,7 +54,6 @@ def is_within_eyesight(seek_object_type : str, i: int, j: int):
         
         if GameWorld[top][j] != "x" and GameWorld[top][j] != seek_object_type:
             break
-        
     # bottom
     while bottom < Rows - 1:
         bottom += 1
@@ -63,7 +62,6 @@ def is_within_eyesight(seek_object_type : str, i: int, j: int):
         
         if GameWorld[bottom][j] != "x" and GameWorld[bottom][j] != seek_object_type:
             break
-        
     # left
     while left > 0:
         left -= 1
@@ -72,7 +70,6 @@ def is_within_eyesight(seek_object_type : str, i: int, j: int):
         
         if GameWorld[i][left] != "x" and GameWorld[i][left] != seek_object_type:
             break
-        
     # right
     while right < Columns - 1:
         right += 1
@@ -102,7 +99,7 @@ def is_object_valid(object_type: str, i: int, j: int) -> bool:
 
     return False
 
-if (__name__ == "__main__"):
+def populate_static_objects():
     # [p]layer
     GameWorld[0][1] = "p"
     
@@ -110,16 +107,28 @@ if (__name__ == "__main__"):
     GameWorld[2][3] = "o"
     GameWorld[4][13] = "o"
 
+    # [n]ebula
+    GameWorld[9][9] = "n"
+
     # [a]steroid
     GameWorld[4][4] = "a"
     GameWorld[4][5] = "a"
     GameWorld[5][6] = "a"
 
-    # TODO : populate dynamic objects
-    # TODO : look into procedural generation
+def populate_dynamic_objects():
+    # [e]nemy
     GameWorld[5][5] = "e"
+    # [w]eapons cache
     GameWorld[9][6] = "w"
+    # [f]uel cache 
     GameWorld[1][14] = "f"
+
+if (__name__ == "__main__"):
+    populate_static_objects()    
+
+    # TODO : populate dynamic objects base on rules
+    # TODO : look into procedural generation ?
+    populate_dynamic_objects()
 
     # check if grid is valid
     for i, object_row in enumerate(GameWorld):
