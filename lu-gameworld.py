@@ -32,34 +32,57 @@ def print_grid():
 
 def is_within_distance(seek_object_type : str, i: int, j: int, distance: int) -> bool:
     min_i = max(0,          i - distance)
-    max_i = min(Rows,       i + distance)
+    max_i = min(Rows,       i + distance + 1)
     min_j = max(0,          j - distance)
-    max_j = min(Columns,    j + distance)
+    max_j = min(Columns,    j + distance + 1)
 
-    for i in range(min_i, max_i + 1):
-        for j in range(min_j, max_j + 1):
+    for i in range(min_i, max_i):
+        for j in range(min_j, max_j):
             if GameWorld[i][j] == seek_object_type:
                 return True
     
     return False
 
-# TODO : FIX!!
 def is_within_eyesight(seek_object_type : str, i: int, j: int):
-    t, b = i, i
-    while t > 0 and b < Rows:
-        t -= 1
-        b += 1
-        if GameWorld[t][j] != "x" and GameWorld[t][j] != seek_object_type:
-            return False
+    top, bottom, left, right = i, i, j, j
+    
+    # top
+    while top > 0:
+        top -= 1
+        if GameWorld[top][j] == seek_object_type:
+            return True
+        
+        if GameWorld[top][j] != "x" and GameWorld[top][j] != seek_object_type:
+            break
+        
+    # bottom
+    while bottom < Rows - 1:
+        bottom += 1
+        if GameWorld[bottom][j] == seek_object_type:
+            return True
+        
+        if GameWorld[bottom][j] != "x" and GameWorld[bottom][j] != seek_object_type:
+            break
+        
+    # left
+    while left > 0:
+        left -= 1
+        if GameWorld[i][left] == seek_object_type:
+            return True
+        
+        if GameWorld[i][left] != "x" and GameWorld[i][left] != seek_object_type:
+            break
+        
+    # right
+    while right < Columns - 1:
+        right += 1
+        if GameWorld[i][right] == seek_object_type:
+            return True
+        
+        if GameWorld[i][right] != "x" and GameWorld[i][right] != seek_object_type:
+            break
 
-    l, r = j, j
-    while t > 0 and b < Rows:
-        l -= 1
-        r += 1
-        if GameWorld[i][l] != "x" and GameWorld[i][r] != seek_object_type:
-            return False
-
-    return True
+    return False
 
 def is_object_valid(object_type: str, i: int, j: int) -> bool:
     if object_type == "p" or object_type == "x" or object_type == "a" or object_type == "o" or object_type == "n":
@@ -72,15 +95,20 @@ def is_object_valid(object_type: str, i: int, j: int) -> bool:
     if object_type == "w":
         if not is_within_distance("o", i, j, 2) and not is_within_eyesight("e", i, j):
             return True
+        
+    if object_type == "f":
+        if not is_within_distance("o", i, j, 2) and not is_within_eyesight("e", i, j):
+            return True 
 
     return False
 
 if (__name__ == "__main__"):
     # [p]layer
-    GameWorld[1][1] = "p"
+    GameWorld[0][1] = "p"
     
     # [o]planet
     GameWorld[2][3] = "o"
+    GameWorld[4][13] = "o"
 
     # [a]steroid
     GameWorld[4][4] = "a"
@@ -90,8 +118,8 @@ if (__name__ == "__main__"):
     # TODO : populate dynamic objects
     # TODO : look into procedural generation
     GameWorld[5][5] = "e"
-
-    GameWorld[7][5] = "w"
+    GameWorld[9][6] = "w"
+    GameWorld[1][14] = "f"
 
     # check if grid is valid
     for i, object_row in enumerate(GameWorld):
