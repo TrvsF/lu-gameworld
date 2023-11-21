@@ -28,7 +28,7 @@ def print_grid():
     for row in GameWorld:
         for columnrow in row:
             print(f"{columnrow}", end=" ")
-        print("")
+        print()
 
 def is_within_distance(seek_object_type : str, i: int, j: int, distance: int) -> bool:
     min_i = max(0,          i - distance)
@@ -43,7 +43,7 @@ def is_within_distance(seek_object_type : str, i: int, j: int, distance: int) ->
     
     return False
 
-def is_within_eyesight(seek_object_type : str, i: int, j: int):
+def is_within_eyesight(seek_object_type : str, i: int, j: int) -> bool:
     top, bottom, left, right = i, i, j, j
     
     # top
